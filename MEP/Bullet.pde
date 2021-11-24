@@ -1,5 +1,5 @@
 int radius;
-PVector location, force, acceleration, velocity, gravity;
+PVector location, force, acceleration, velocity, gravity, dir;
 float topspeed;
 
 class Bullet{
@@ -12,9 +12,9 @@ class Bullet{
     topspeed=20;
   }
   
-  void applyforce(){
+  void applyForce(){
    PVector mouse = new PVector(mouseX,mouseY);
-   PVector dir = PVector.sub(mouse,location);
+   dir = PVector.sub(mouse,location);
    velocity.limit(topspeed);
    if(cannon.shoot==true){
       dir.mult(0.004);
@@ -41,18 +41,38 @@ class Bullet{
     }
   }
   
-    void applyGravity(PVector force)
-  {
+    void applyGravity(PVector force){
     PVector f = PVector.div(force,radius);
     if(location.x>80||location.y<280){
     velocity.add(f);
     }
   }
   
+    void showForce(){
+      PVector textloc = new PVector(120,35);
+      float force = dir.mag();
+      force=(force*100)/1000;
+      int fr = round(force);
+      fill(0);
+      textSize(30);
+      if(cannon.shoot==false){
+        text("Force:",10,35);
+        if(mouseX>150&&force<100){
+          text(fr+"%", textloc.x,textloc.y);
+        }
+        if(mouseX<150){
+          text(0+"%",textloc.x,textloc.y);}
+        if(force>=100){text(100+"%",textloc.x,textloc.y);{
+        }
+      }
+    }
+  }
+  
   void update(){
-    applyforce();
+    applyForce();
     edgeCollide();
     applyGravity(gravity);
+    showForce();
   }
     
   void display(){
