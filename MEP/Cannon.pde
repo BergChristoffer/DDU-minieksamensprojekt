@@ -3,12 +3,20 @@ class Cannon{
   float angle;
   float w,h;
   PVector location;
+  boolean shoot;
   Cannon(){
     img = loadImage("kanon.png");
-    location = new PVector(50,335);
+    location = new PVector(50,700);
     w=img.width;
     h=img.height;
+    shoot=false;
   }
+  void shoot(){
+    if(mousePressed==true&&shoot==false&&mouseX>150){
+      shoot=true;
+    }
+  }
+  
   void display()
   {
     imageMode(CENTER);
