@@ -6,13 +6,13 @@ class Cannon{
   boolean shoot;
   Cannon(){
     img = loadImage("kanon.png");
-    location = new PVector(50,700);
+    location = new PVector(30,770);
     w=img.width;
     h=img.height;
     shoot=false;
   }
   void shoot(){
-    if(mousePressed==true&&shoot==false&&mouseX>150){
+    if(mousePressed==true&&shoot==false&&mouseX>90){
       shoot=true;
     }
   }
