@@ -43,9 +43,12 @@ void teacherMenu() {
   cp5.remove("login to team");
 
   cp5.addTextfield("add student").setPosition(100, 100).setSize(200, 40).setFont(createFont("arial", 20)).setAutoClear(true).setColorCaptionLabel(color(0));
-  cp5.addTextfield("add question").setPosition(500, 200).setSize(500, 40).setFont(createFont("arial", 20)).setAutoClear(true).setColorCaptionLabel(color(0));
-  cp5.addTextfield("correct answer").setPosition(600, 300).setSize(200, 40).setFont(createFont("arial", 20)).setAutoClear(true).setColorCaptionLabel(color(0));
-  cp5.addTextfield("wrong answer 1").setPosition(600, 400).setSize(200, 40).setFont(createFont("arial", 20)).setAutoClear(true).setColorCaptionLabel(color(0));
-  cp5.addTextfield("wrong answer 2").setPosition(600, 500).setSize(200, 40).setFont(createFont("arial", 20)).setAutoClear(true).setColorCaptionLabel(color(0));
-  cp5.addButton("submit question").setPosition(600, 600).setFont(createFont("arial", 15)).setSize(200, 50);
+  cp5.addTextfield("add question").setPosition(700, 200).setSize(500, 40).setFont(createFont("arial", 20)).setAutoClear(true).setColorCaptionLabel(color(0));
+  cp5.addTextfield("correct answer").setPosition(800, 300).setSize(200, 40).setFont(createFont("arial", 20)).setAutoClear(true).setColorCaptionLabel(color(0));
+  cp5.addTextfield("wrong answer 1").setPosition(800, 400).setSize(200, 40).setFont(createFont("arial", 20)).setAutoClear(true).setColorCaptionLabel(color(0));
+  cp5.addTextfield("wrong answer 2").setPosition(800, 500).setSize(200, 40).setFont(createFont("arial", 20)).setAutoClear(true).setColorCaptionLabel(color(0));
+  cp5.addButton("submit question").setPosition(800, 600).setFont(createFont("arial", 15)).setSize(200, 50);
+  cp5.addButton("result screen").setPosition(1090, 10).setFont(createFont("arial", 15)).setSize(200, 50);
+
+  
 }

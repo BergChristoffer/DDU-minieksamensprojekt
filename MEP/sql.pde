@@ -2,14 +2,21 @@ String teacherLoginUsername, teacherLoginPassword, teacherCreateUsername, teache
 String sql;
 int questionIndex = 0;
 String question, answer;
+int amountOfCorrectAnswers;
 
 ArrayList<String> names = new ArrayList<String>();
+ArrayList<String> results = new ArrayList<String>();
+ArrayList<String> scores = new ArrayList<String>();
+
 ArrayList<Question> questions = new ArrayList<Question>();
 ArrayList<String> correctAnswers = new ArrayList<String>();
 ArrayList<String> wrongAnswers = new ArrayList<String>();
 Boolean rightAnswer = false;
 Boolean wrongAnswer = false;
 Boolean studentText = false;
+Boolean noMoreQuestions = false;
+Boolean resultText = false;
+
 int numberOfStudents;
 
 
@@ -158,7 +165,7 @@ void createStudent() {
         db.query( "SELECT ID_Team FROM Team WHERE TeamName = '" + loginTeam + "'" );
 
 
-        sql = "INSERT INTO Student (Name, ID_Team) VALUES ('" + studentName + "', '" + db.getInt("ID_Team") + "');";
+        sql = "INSERT INTO Student (Name, ID_Team, Score, NumberOfCorrectAnswers) VALUES ('" + studentName + "', '" + db.getInt("ID_Team") + "', '"+ 0 +"', '"+ 0 +"');";
 
         println(db.getInt("ID_Team"));
 
@@ -280,7 +287,10 @@ void loginStudent() {
   if ( db.connect() )
   {
     try {
+
+
       db.query( "SELECT ID_Team FROM Team WHERE TeamName = '" + studentTeamName + "'" );
+
 
       db.query( "SELECT Name, ID_Team FROM Student WHERE Name = '" + studentLogin + "' AND ID_Team = '" + db.getInt("ID_Team") +"'" );
 
@@ -296,6 +306,7 @@ void loginStudent() {
       } else {
         println("playing game");
         //Her starter spillet
+        getQuestions();
         game = true;
         cp5.hide();
       }
@@ -303,6 +314,7 @@ void loginStudent() {
 
       db.close();
     }
+
     catch (Exception e) {
       System.out.println("Exception: "+e);
     }
@@ -412,9 +424,6 @@ void drawQuiz() {
   answers.remove(random2);
   String answer3Text = answers.get(0);
 
-
-
-
   cp5 = new ControlP5(this);
 
   questionText = cp5.addTextarea("txt1")
@@ -474,9 +483,6 @@ void checkAnswer() {
       db.query( "SELECT ID_Question FROM Question WHERE ID_Team = " + db.getInt("ID_Team") + " AND Question = '" + question + "'" ); 
       db.query( "SELECT Answer FROM CorrectAnswer WHERE ID_Question = '" + db.getInt("ID_Question") + "'" );
 
-      println(answer);
-      println(db.getString("Answer"));
-
       if (answer.equals(db.getString("Answer"))) {
         rightAnswer = true;
         cp5.hide();
@@ -484,15 +490,111 @@ void checkAnswer() {
         cp5.hide();
         wrongAnswer = true;
       }
+      db.close();
+
       if (questionIndex == questions.size()) {
-        gameOver = true;
+        noMoreQuestions = true;
         return;
+
+        //gameOver = true;
+        //return;
+      }
+    }
+    catch (Exception e) {
+      System.out.println("Exception: "+e);
+    }
+  }
+}
+
+void insertAmountOfCorrectAnswers() {
+  db = new SQLite( this, "MEP_database.sqlite" );
+  // Connect to database
+  if ( db.connect() )
+  {
+    try {
+      db.query( "SELECT ID_Team FROM Team WHERE TeamName = '" + studentTeamName + "'" );
+      db.query( "SELECT ID_Student FROM Student WHERE ID_Team = " + db.getInt("ID_Team") + " AND Name = '" + studentLogin + "'" );
+
+      sql = "UPDATE Student SET NumberOfCorrectAnswers = " + amountOfCorrectAnswers + " WHERE ID_Student = " + db.getInt("ID_Student");
+
+      db.execute(sql);
+
+      db.close();
+    }
+
+    catch (Exception e) {
+      System.out.println("Exception: "+e);
+    }
+  }
+}
+
+void getResults() {
+  db = new SQLite( this, "MEP_database.sqlite" );
+  // Connect to database
+  if ( db.connect() )
+  {
+    try {
+      db.query( "SELECT ID_Team FROM Team WHERE TeamName = '" + loginTeam + "'" );
+
+      int ID_Team = db.getInt("ID_Team");
+
+      db.query( "SELECT NumberOfCorrectAnswers FROM Student WHERE ID_Team = '" + ID_Team + "'" );
+
+
+      results.clear();
+
+      while (db.next()) {
+        String result = db.getString("NumberOfCorrectAnswers");
+        results.add(result);
       }
 
+      db.query( "SELECT Score FROM Student WHERE ID_Team = '" + ID_Team + "'" );
+      scores.clear();
+
+      while (db.next()) {
+        String score = db.getString("Score");
+        scores.add(score);
+      }
+
+      db.query( "SELECT Name FROM Student WHERE ID_Team = '" + ID_Team + "'" );
+      names.clear();
+
+      while (db.next()) {
+        String name = db.getString("Name");
+        names.add(name);
+      }
+      resultText = true;
       db.close();
     }
     catch (Exception e) {
       System.out.println("Exception: "+e);
     }
+  }
+}
+
+void showResultText() {
+  fill(0);
+  textSize(30);
+  text("Name", 100, 150);
+  text("Number of correct answers", 500, 150);
+  text("score", 1000, 150);
+
+  textSize(20);
+  int y1 = 200;
+  for (String line : results) {
+    text(line + " / " + results.size(), 500, y1);
+    y1 += 30;
+  }
+
+  int y2 = 200;
+  for (String line : names) {
+    text(line, 100, y2);
+    y2 += 30;
+  }
+
+  int y3 = 200;
+  for (String line : scores) {
+    text(line, 1000, y3);
+    y3 += 30;
   }
 }

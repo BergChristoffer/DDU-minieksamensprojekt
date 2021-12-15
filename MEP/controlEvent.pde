@@ -63,7 +63,6 @@ void controlEvent(ControlEvent theEvent) {
     studentLogin = cp5.get(Textfield.class, "student name").getText();
     studentTeamName = cp5.get(Textfield.class, "team name").getText();
     loginStudent();
-    getQuestions();
   }
   if (theEvent.getName() == "answer 1") {
     question = questionText.getText();
@@ -80,4 +79,13 @@ void controlEvent(ControlEvent theEvent) {
     answer = answer3.getText();
     checkAnswer();
   }
+  
+   if (theEvent.getName() == "result screen") {
+    getResults();
+    resultText = true;
+    studentText = false;
+    cp5.hide();
+  }
+  
+  
 }

@@ -13,6 +13,7 @@ GameScreen gamescreen;
 
 void setup() {
   size(1300, 800);
+  frameRate(60);
   drawStartScreen();
 
   gamescreen = new GameScreen();
@@ -24,6 +25,10 @@ void draw() {
 
   if (studentText)
     showStudent();
+
+  if (resultText){
+    showResultText();
+  }
 
   if (game)
     gamescreen.draw();

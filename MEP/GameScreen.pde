@@ -2,6 +2,7 @@ Cannon cannon;
 Bullet bullet;
 Target target;
 int score, oldScore;
+int seconds = 10;
 Boolean game = false;
 Boolean quizOpen = false;
 Boolean gameOver = false;
@@ -17,13 +18,18 @@ class GameScreen {
 
   void draw() {
     background(200);
+
+    text("score " + score, 10, 75);
+    bullet.display();
+    cannon.display();
+
     if (hit) {
       score++ ;
       scoreUpdater();
       hit = false;
     }
 
-    if (score == oldScore + 2) {
+    if (score == oldScore + 2 && questionIndex != questions.size()) {
       oldScore = score;
       drawQuiz();
       quizOpen = true;
@@ -32,6 +38,8 @@ class GameScreen {
     if (rightAnswer) {
       score = score + 1;
       oldScore = score;
+      amountOfCorrectAnswers++;
+      insertAmountOfCorrectAnswers();
       quizOpen = false;
       rightAnswer = false;
     }
@@ -41,9 +49,21 @@ class GameScreen {
       wrongAnswer = false;
     }
 
-    text("score " + score, 10, 75);
-    bullet.display();
-    cannon.display();
+    if (noMoreQuestions) {
+
+      if (frameCount >= 60 && seconds <= 10) {
+        seconds--;
+        frameCount = 0;
+      } else if (noMoreQuestions && seconds <= 0) {
+        gameOver = true;
+      }
+      if ( seconds > 0) {
+        fill(0);
+        text("time left " + seconds + " seconds", 10, 125);
+      }
+    }
+
+
 
 
     if (!quizOpen)
@@ -55,7 +75,9 @@ class GameScreen {
         bullet.update();
         cannon.readUserInput();
       } else {
+        fill(0);
         text("GAME OVER", width/2-50, height/2);
+        text("Correct Answers: " + amountOfCorrectAnswers + " / " + questions.size(), width/2-50, height/2 + 50);
       }
     }
   }
