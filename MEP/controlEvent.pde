@@ -58,11 +58,26 @@ void controlEvent(ControlEvent theEvent) {
     createQuestion();
     createAnswer();
   }
-  
-   if (theEvent.getName() == "play game") {
+
+  if (theEvent.getName() == "play game") {
     studentLogin = cp5.get(Textfield.class, "student name").getText();
     studentTeamName = cp5.get(Textfield.class, "team name").getText();
     loginStudent();
+    getQuestions();
   }
-  
+  if (theEvent.getName() == "answer 1") {
+    question = questionText.getText();
+    answer = answer1.getText();
+    checkAnswer();
+  }
+  if (theEvent.getName() == "answer 2") {
+    question = questionText.getText();
+    answer = answer2.getText();
+    checkAnswer();
+  }
+  if (theEvent.getName() == "answer 3") {
+    question = questionText.getText();
+    answer = answer3.getText();
+    checkAnswer();
+  }
 }

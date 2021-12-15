@@ -1,7 +1,14 @@
 String teacherLoginUsername, teacherLoginPassword, teacherCreateUsername, teacherCreatePassword, studentName, createTeam, loginTeam, createQuestion, correctAnswer, wrongAnswer1, wrongAnswer2, s, q, l, studentLogin, studentTeamName = ""; //<>//
 String sql;
+int questionIndex = 0;
+String question, answer;
+
 ArrayList<String> names = new ArrayList<String>();
-ArrayList<String> questions = new ArrayList<String>();
+ArrayList<Question> questions = new ArrayList<Question>();
+ArrayList<String> correctAnswers = new ArrayList<String>();
+ArrayList<String> wrongAnswers = new ArrayList<String>();
+Boolean rightAnswer = false;
+Boolean wrongAnswer = false;
 Boolean studentText = false;
 int numberOfStudents;
 
@@ -302,6 +309,27 @@ void loginStudent() {
   }
 }
 
+void scoreUpdater() {
+  db = new SQLite( MEP.this, "MEP_database.sqlite" );
+  // Connect to database
+  if ( db.connect() )
+  {
+    try {
+
+      db.query( "SELECT ID_Team FROM Team WHERE TeamName = '" + studentTeamName + "'" );
+      db.query( "SELECT ID_Student FROM Student WHERE ID_Team = " + db.getInt("ID_Team") + " AND Name = '" + studentLogin + "'" );
+
+      sql = "UPDATE Student SET Score = " + score + " WHERE ID_Student = " + db.getInt("ID_Student");
+
+      db.execute(sql);
+
+      db.close();
+    }
+    catch (Exception e) {
+      System.out.println("Exception: "+e);
+    }
+  }
+}
 
 
 void getQuestions() {
@@ -313,34 +341,153 @@ void getQuestions() {
 
       db.query( "SELECT ID_Team FROM Team WHERE TeamName = '" + studentTeamName + "'" );
 
-      db.query( "SELECT Question FROM Question WHERE ID_Team = '" + db.getInt("ID_Team") + "'" );
+      int ID_Team = db.getInt("ID_Team");
 
+      db.query( "SELECT Question FROM Question WHERE ID_Team = '" + ID_Team + "'" );
 
+      questions.clear();
       while (db.next()) {
-        String question = db.getString("Question");
+        Question question = new Question();
+        question.question = db.getString("Question");
         questions.add(question);
       }
 
+      db.query( "SELECT ID_Question FROM Question WHERE ID_Team = '" + ID_Team + "'" );
+
+      correctAnswers.clear();
+
+      ArrayList<Integer> ID_questions = new ArrayList<Integer>();
+
+      while (db.next()) {
+        Integer ID_Question = db.getInt("ID_Question");
+        ID_questions.add(ID_Question);
+      }
+
+
+      for (int i = 0; i < ID_questions.size(); i++) {
+        db.query( "SELECT Answer FROM CorrectAnswer WHERE ID_Question = '" + ID_questions.get(i) + "'" );
+        questions.get(i).correctAnswer = db.getString("Answer");
+      }
+
+      for (int i = 0; i < ID_questions.size(); i++) {
+        db.query( "SELECT WrongAnswer FROM WrongAnswer WHERE ID_Question = '" + ID_questions.get(i) + "'" );
+        db.next();
+        questions.get(i).wrongAnswer1 = db.getString("WrongAnswer");
+        db.next();
+        questions.get(i).wrongAnswer2 = db.getString("WrongAnswer");
+      }
+      db.close();
+    }
+    catch (Exception e) {
+      System.out.println("Exception: "+e);
+    }
+  }
+}
+
+void drawQuiz() {
+  if (questionText != null)
+    questionText.remove();
+
+  if (answer1 != null)
+    answer1.remove();
+
+  if (answer2 != null)
+    answer2.remove();
+
+  if (answer3 != null)
+    answer3.remove();
+
+  Question question = questions.get(questionIndex);
+
+  ArrayList<String> answers = new ArrayList<String>();
+  answers.add(question.correctAnswer);
+  answers.add(question.wrongAnswer1);
+  answers.add(question.wrongAnswer2);
+
+  int random1 = (int)random(0, answers.size());
+  String answer1Text = answers.get(random1);
+  answers.remove(random1);
+  int random2 = (int)random(0, answers.size());
+  String answer2Text = answers.get(random2);
+  answers.remove(random2);
+  String answer3Text = answers.get(0);
 
 
 
 
-      //myTextarea = cp5.addTextarea("txt")
-      //  .setPosition(100, 100)
-      //  .setSize(200, 200)
-      //  .setFont(createFont("arial", 12))
-      //  .setLineHeight(14)
+  cp5 = new ControlP5(this);
 
-      //  .setColor(color(255))
-      //  .setColorBackground(color(150))
-      //  .setColorForeground(color(0));
-
-
-      //myTextarea.setText(db.getString("Question"));
-
+  questionText = cp5.addTextarea("txt1")
+    .setPosition(350, 100)
+    .setSize(600, 50)
+    .setFont(createFont("arial", 30))
+    .setLineHeight(14)
+    .setColor(color(0))
+    .setColorBackground(color(255))
+    .setBorderColor(0);
+  questionText.setText(question.question);
 
 
+  answer1 = cp5.addTextarea("txt2")
+    .setPosition(350, 150)
+    .setSize(600, 50)
+    .setFont(createFont("arial", 20))
+    .setLineHeight(14)
+    .setColor(color(0))
+    .setColorBackground(color(255))
+    .setBorderColor(0);
+  answer1.setText(answer1Text);
 
+  answer2 = cp5.addTextarea("txt3")
+    .setPosition(350, 200)
+    .setSize(600, 50)
+    .setFont(createFont("arial", 20))
+    .setLineHeight(14)
+    .setColor(color(0))
+    .setColorBackground(color(255))
+    .setBorderColor(0);
+  answer2.setText(answer2Text);
+
+  answer3 = cp5.addTextarea("txt4")
+    .setPosition(350, 250)
+    .setSize(600, 50)
+    .setFont(createFont("arial", 20))
+    .setLineHeight(14)
+    .setColor(color(0))
+    .setColorBackground(color(255))
+    .setBorderColor(0);
+  answer3.setText(answer3Text);
+
+  cp5.addButton("answer 1").setPosition(950, 150).setFont(createFont("arial", 15)).setSize(100, 40);
+  cp5.addButton("answer 2").setPosition(950, 200).setFont(createFont("arial", 15)).setSize(100, 40);
+  cp5.addButton("answer 3").setPosition(950, 250).setFont(createFont("arial", 15)).setSize(100, 40);
+  questionIndex++;
+}
+
+void checkAnswer() {
+  db = new SQLite( this, "MEP_database.sqlite" );
+  // Connect to database
+  if ( db.connect() )
+  {
+    try {
+      db.query( "SELECT ID_Team FROM Team WHERE TeamName = '" + studentTeamName + "'" );
+      db.query( "SELECT ID_Question FROM Question WHERE ID_Team = " + db.getInt("ID_Team") + " AND Question = '" + question + "'" ); 
+      db.query( "SELECT Answer FROM CorrectAnswer WHERE ID_Question = '" + db.getInt("ID_Question") + "'" );
+
+      println(answer);
+      println(db.getString("Answer"));
+
+      if (answer.equals(db.getString("Answer"))) {
+        rightAnswer = true;
+        cp5.hide();
+      } else {
+        cp5.hide();
+        wrongAnswer = true;
+      }
+      if (questionIndex == questions.size()) {
+        gameOver = true;
+        return;
+      }
 
       db.close();
     }
