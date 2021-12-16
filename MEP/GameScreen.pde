@@ -19,7 +19,6 @@ class GameScreen {
   void draw() {
     background(200);
 
-    text("score " + score, 10, 75);
     bullet.display();
     cannon.display();
 
@@ -63,9 +62,6 @@ class GameScreen {
       }
     }
 
-
-
-
     if (!quizOpen)
     {
       if (!gameOver)
@@ -74,10 +70,13 @@ class GameScreen {
         target.display();
         bullet.update();
         cannon.readUserInput();
+        text("score " + score, 10, 75);
       } else {
+        textAlign(CENTER);
         fill(0);
-        text("GAME OVER", width/2-50, height/2);
-        text("Correct Answers: " + amountOfCorrectAnswers + " / " + questions.size(), width/2-50, height/2 + 50);
+        textSize(50);
+        text("GAME OVER", width/2, height/2);
+        text("Correct Answers: " + amountOfCorrectAnswers + " / " + questions.size(), width/2+75, height/2+75);
       }
     }
   }

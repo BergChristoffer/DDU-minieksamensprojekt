@@ -290,8 +290,6 @@ void loginStudent() {
 
 
       db.query( "SELECT ID_Team FROM Team WHERE TeamName = '" + studentTeamName + "'" );
-
-
       db.query( "SELECT Name, ID_Team FROM Student WHERE Name = '" + studentLogin + "' AND ID_Team = '" + db.getInt("ID_Team") +"'" );
 
       int count = 0;
@@ -573,28 +571,35 @@ void getResults() {
 }
 
 void showResultText() {
+  fill(255);
+  rect(100, 60, 1100, 675);
   fill(0);
+  line(475, 60, 475, 750);
+  line(975, 60, 975, 750);
+
   textSize(30);
-  text("Name", 100, 150);
-  text("Number of correct answers", 500, 150);
-  text("score", 1000, 150);
+  text("Name", 125, 125);
+  text("Number of correct answers", 500, 125);
+  text("score", 1000, 125);
 
   textSize(20);
-  int y1 = 200;
+  int y1 = 150;
   for (String line : results) {
     text(line + " / " + results.size(), 500, y1);
     y1 += 30;
   }
 
-  int y2 = 200;
+  int y2 = 150;
   for (String line : names) {
-    text(line, 100, y2);
+    text(line, 125, y2);
     y2 += 30;
   }
 
-  int y3 = 200;
+  int y3 = 150;
   for (String line : scores) {
     text(line, 1000, y3);
     y3 += 30;
+    
   }
+  fill(255);
 }
