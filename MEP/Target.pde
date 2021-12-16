@@ -1,10 +1,11 @@
 
 boolean hit;
 class Target {
-  PVector location;
+  PVector location, velocity;
   float radius, stroke;
   Target() {
     location = new PVector(random(300, 1200), random(250, 700));
+    velocity = new PVector(0,0);
     radius=100;
     stroke=10;
     hit=false;
@@ -21,6 +22,16 @@ class Target {
         hit=false;
       }
     }
+  }
+  
+  
+  void update(){
+    location.add(velocity);
+    if(hit){
+    velocity = new PVector(random(-5,5),random(-5,5));
+    }
+    if(location.x>width-50||location.x<300){velocity.x=velocity.x*-1;}
+    if(location.y>height-50||location.y<250){velocity.y=velocity.y*-1;}
   }
 
   void display() {

@@ -18,6 +18,9 @@ class GameScreen {
 
   void draw() {
     background(200);
+    fill(100);
+    stroke(0);
+    rect(250,200,1050,600);
 
     bullet.display();
     cannon.display();
@@ -68,6 +71,7 @@ class GameScreen {
       {
         target.dissapear();
         target.display();
+        target.update();
         bullet.update();
         cannon.readUserInput();
         text("score " + score, 10, 75);
