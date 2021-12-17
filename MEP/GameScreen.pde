@@ -8,9 +8,10 @@ Boolean quizOpen = false;
 Boolean gameOver = false;
 
 class GameScreen {
-
+PImage background;
 
   GameScreen() {
+    background = loadImage("background texture.png");
     cannon=new Cannon();
     bullet = new Bullet();
     target = new Target();
@@ -18,9 +19,7 @@ class GameScreen {
 
   void draw() {
     background(200);
-    fill(100);
-    stroke(0);
-    rect(250,200,1050,600);
+    image(background, 0, 0);
 
     bullet.display();
     cannon.display();
@@ -81,6 +80,7 @@ class GameScreen {
         textSize(50);
         text("GAME OVER", width/2, height/2);
         text("Correct Answers: " + amountOfCorrectAnswers + " / " + questions.size(), width/2+75, height/2+75);
+        
       }
     }
   }

@@ -4,7 +4,7 @@ class Target {
   PVector location, velocity;
   float radius, stroke;
   Target() {
-    location = new PVector(random(300, 1200), random(250, 700));
+    location = new PVector(random(320, 1200), random(250, 700));
     velocity = new PVector(0,0);
     radius=100;
     stroke=10;
@@ -29,9 +29,11 @@ class Target {
     location.add(velocity);
     if(hit){
     velocity = new PVector(random(-5,5),random(-5,5));
+    if(velocity.x<1.5&&velocity.x>-1.5){velocity.x=0;}
+    if(velocity.y<1.5&&velocity.y>-1.5){velocity.y=0;}
     }
     if(location.x>width-50||location.x<300){velocity.x=velocity.x*-1;}
-    if(location.y>height-50||location.y<250){velocity.y=velocity.y*-1;}
+    if(location.y>height-50||location.y<50){velocity.y=velocity.y*-1;}
   }
 
   void display() {

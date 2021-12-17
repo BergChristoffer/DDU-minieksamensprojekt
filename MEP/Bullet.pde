@@ -80,7 +80,9 @@ class Bullet {
   }
 
   void display() {
-    fill(255, 255, 0);
+    fill(255,255,0);
+    strokeWeight(4);
+    stroke(0);
     ellipse(location.x, location.y, radius, radius);
   }
 }
