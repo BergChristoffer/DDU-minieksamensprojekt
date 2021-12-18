@@ -21,9 +21,24 @@ void drawStudentLoginScreen() {
   cp5.remove("teacher");
   cp5.remove("student");
 
-  cp5.addTextfield("student name").setPosition(550, 300).setSize(200, 40).setFont(createFont("arial", 20)).setAutoClear(false).setColorCaptionLabel(color(0));
-  cp5.addTextfield("team name").setPosition(550, 400).setSize(200, 40).setFont(createFont("arial", 20)).setAutoClear(false).setColorCaptionLabel(color(0));
-  cp5.addButton("play game").setPosition(550, 500).setFont(createFont("arial", 15)).setSize(200, 40);
+  cp5.addTextfield("student name")
+  .setPosition(550, 300)
+  .setSize(200, 40)
+  .setFont(createFont("arial", 20))
+  .setAutoClear(false)
+  .setColorCaptionLabel(color(0));
+  
+  cp5.addTextfield("team name")
+  .setPosition(550, 400)
+  .setSize(200, 40)
+  .setFont(createFont("arial", 20))
+  .setAutoClear(false)
+  .setColorCaptionLabel(color(0));
+  
+  cp5.addButton("play game")
+  .setPosition(550, 500)
+  .setFont(createFont("arial", 15))
+  .setSize(200, 40);
 }
 
 void createTeamScreen() {

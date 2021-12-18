@@ -30,7 +30,7 @@ PImage background;
       hit = false;
     }
 
-    if (score == oldScore + 2 && questionIndex != questions.size()) {
+    if (score == oldScore + 10 && questionIndex != questions.size()) {
       oldScore = score;
       drawQuiz();
       quizOpen = true;

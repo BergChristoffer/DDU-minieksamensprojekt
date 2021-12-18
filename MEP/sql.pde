@@ -75,8 +75,6 @@ void loginTeacher() {
         }
 
         if (count==0) {
-          //wrongLogin = true;
-          //i=0;
           println("wrong login");
         } else 
         createTeamScreen();
