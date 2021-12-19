@@ -2,7 +2,7 @@ Cannon cannon;
 Bullet bullet;
 Target target;
 int score, oldScore;
-int seconds = 10;
+int seconds = 60;
 Boolean game = false;
 Boolean quizOpen = false;
 Boolean gameOver = false;
@@ -37,7 +37,7 @@ PImage background;
     }
 
     if (rightAnswer) {
-      score = score + 1;
+      score = score + 5;
       oldScore = score;
       amountOfCorrectAnswers++;
       insertAmountOfCorrectAnswers();
@@ -52,7 +52,7 @@ PImage background;
 
     if (noMoreQuestions) {
 
-      if (frameCount >= 60 && seconds <= 10) {
+      if (frameCount >= 60 && seconds <= 60) {
         seconds--;
         frameCount = 0;
       } else if (noMoreQuestions && seconds <= 0) {

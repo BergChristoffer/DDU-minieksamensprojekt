@@ -190,8 +190,17 @@ void createQuestion() {
       if (createQuestion != "") {
 
         db.query( "SELECT ID_Team FROM Team WHERE TeamName = '" + loginTeam + "'" );
-        sql = "INSERT INTO Question (Question, ID_Team) VALUES ('" + createQuestion + "', '" + db.getInt("ID_Team") + "');";
-        db.execute(sql);
+        int ID = db.getInt("ID_Team");
+
+        db.query( "SELECT Question FROM Question WHERE Question = '" + createQuestion + "'" );
+
+        if (createQuestion.equals(db.getString("Question"))) {
+          println("question already exists");
+        } else {
+
+          sql = "INSERT INTO Question (Question, ID_Team) VALUES ('" + createQuestion + "', '" + ID + "');";
+          db.execute(sql);
+        }
 
         db.close();
       }
@@ -579,11 +588,10 @@ void showResultText() {
   text("Name", 125, 125);
   text("Number of correct answers", 500, 125);
   text("score", 1000, 125);
-
   textSize(20);
   int y1 = 150;
   for (String line : results) {
-    text(line + " / " + results.size(), 500, y1);
+    text(line, 500, y1);
     y1 += 30;
   }
 
@@ -597,7 +605,6 @@ void showResultText() {
   for (String line : scores) {
     text(line, 1000, y3);
     y3 += 30;
-    
   }
   fill(255);
 }

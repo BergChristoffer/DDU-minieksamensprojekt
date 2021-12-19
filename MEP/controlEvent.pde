@@ -79,13 +79,11 @@ void controlEvent(ControlEvent theEvent) {
     answer = answer3.getText();
     checkAnswer();
   }
-  
-   if (theEvent.getName() == "result screen") {
+
+  if (theEvent.getName() == "result screen") {
     getResults();
     resultText = true;
     studentText = false;
     cp5.hide();
   }
-  
-  
 }
